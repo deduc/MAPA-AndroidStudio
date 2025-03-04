@@ -6,6 +6,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
 import android.view.View
@@ -67,13 +68,13 @@ class MyMap {
     }
 
     fun addMarkerPoint(location: GeoPoint, texto: String? = "Punto de Interés") {
-        val userMarker = Marker(this.mapView).apply {
+        val marker = Marker(this.mapView).apply {
             position = location
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             title = texto
         }
 
-        this.mapView.overlays.add(userMarker)
+        this.mapView.overlays.add(marker)
     }
 
     fun userActivatedGPSAndLocationPermission(context: Context, permisosHandler: PermisosHandler): Boolean {

@@ -62,5 +62,7 @@ dependencies {
     // dependencia que trata el ciclo de vida de las activities, "corrutivas"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
+    implementation("androidx.appcompat:appcompat:1.6.1")
+
 //    implementation("org.osmdroid:osmbonuspack:6.9.0")
 }
