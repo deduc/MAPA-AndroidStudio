@@ -46,9 +46,11 @@ class MyMap {
                     cont.resume(it){}
                 }
                 addOnFailureListener {
+                    InfoMessages.showDialogShort(context, "1 - $InfoMessages.ERROR_CANT_GET_LOCATION")
                     cont.resume(null){}
                 }
                 addOnCanceledListener {
+                    InfoMessages.showDialogShort(context, "2- $InfoMessages.ERROR_CANT_GET_LOCATION")
                     cont.resume(null){}
                 }
             }
