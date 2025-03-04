@@ -42,8 +42,7 @@ class PermisosHandler() {
 
     fun userActivatedGPSAndLocationPermission(context: Context, permisosHandler: PermisosHandler): Boolean {
         var locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var isGPSEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.GPS_PROVIDER)
+        var isGPSEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         var userLocationPermission: Boolean = doHandleLocationPermissions(context as Activity, permisosHandler)
 
         if (! isGPSEnabled) {
