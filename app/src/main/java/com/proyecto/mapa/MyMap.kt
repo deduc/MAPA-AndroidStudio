@@ -1,17 +1,14 @@
 package com.proyecto.mapa
 
-import android.app.Activity
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.location.Location
-import android.location.LocationManager
-import android.view.View
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.views.overlay.MapEventsOverlay
@@ -25,23 +22,14 @@ class MyMap {
     lateinit var userLocation: GeoPoint
     private var userClickedAddMarkerButton = false
 
-    fun doHandleLocationPermissions(activityContext: Activity, permisosHandler: PermisosHandler): Boolean {
-        if (! permisosHandler.hasPermissionLocation(activityContext)) {
-            permisosHandler.requestPermissionLocation(activityContext)
-            return false
-        }
-        else {
-            return true
-        }
-    }
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
     suspend fun getUserLocation(context: Context, permisosHandler: PermisosHandler): Location? {
         if (! permisosHandler.userActivatedGPSAndLocationPermission(context, permisosHandler)) {
             return  null
         }
 
-        var fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
         return suspendCancellableCoroutine { cont: CancellableContinuation<Location?> ->
             fusedLocationProviderClient.lastLocation.apply {
@@ -67,7 +55,7 @@ class MyMap {
         }
     }
 
-    fun addMarkerPoint(location: GeoPoint, texto: String? = "Punto de Interés") {
+    private fun addMarkerPoint(location: GeoPoint, texto: String? = "Punto de Interés") {
         val marker = Marker(this.mapView).apply {
             position = location
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
@@ -75,24 +63,6 @@ class MyMap {
         }
 
         this.mapView.overlays.add(marker)
-    }
-
-    fun userActivatedGPSAndLocationPermission(context: Context, permisosHandler: PermisosHandler): Boolean {
-        var locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var isGPSEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        var userLocationPermission: Boolean = doHandleLocationPermissions(context as Activity, permisosHandler)
-
-        if (! isGPSEnabled) {
-            InfoMessages.showDialogShort(context, InfoMessages.ERROR_GPS_NOT_ACTIVATED)
-            return false
-        }
-        else if (! userLocationPermission) {
-            InfoMessages.showDialogShort(context, InfoMessages.ERROR_NOT_LOCATION_PERMISSIONS)
-            return false
-        }
-        else {
-            return true
-        }
     }
 
     fun addMyMarker() {
